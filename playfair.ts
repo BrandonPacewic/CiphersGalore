@@ -108,7 +108,12 @@ const encoder = (
     matrix: string[][], encoding: boolean, input: string
 ): string => {
     const matrixSize = matrix.length;
+
+    // Need to change the string input into array of string len 1
+    // Should be a better way of doing this but we need to be able to 
+    // assign chars through indexing
     let message = input.split('');
+
     let mapCharToCord: { [key: string]: number[] } = {};
 
     for (let row = 0; row < matrixSize; row++) {
@@ -133,12 +138,10 @@ const encoder = (
         return (first === second) ? 'x' : second;
     }
 
-    // TODO: There should be a more time efficient way of doing this
-    // Perhaps we should treat message as a array of string of len 1
     for (let i = 0; i < message.length; i += 2) {
         message[i] = handleJ(message[i]);
-        message[i+1] = handleJ(message[i+1]);
-        message[i+1] = handleDoubles(message[i], message[i+1]);
+        message[i + 1] = handleJ(message[i + 1]);
+        message[i + 1] = handleDoubles(message[i], message[i + 1]);
     }
 
     let messageCords: number[][] = [];
@@ -158,40 +161,40 @@ const encoder = (
     let newCords: number[][] = [];
 
     for (let i = 0; i < messageCords.length; i += 2) {
-        if (messageCords[i][0] === messageCords[i+1][0]) {
+        if (messageCords[i][0] === messageCords[i + 1][0]) {
             newCords[i] = [
                 messageCords[i][0],
                 mod(messageCords[i][1] + adjustment, matrixSize)
             ];
 
-            newCords[i+1] = [
-                messageCords[i+1][0],
-                mod(messageCords[i+1][1] + adjustment, matrixSize)
+            newCords[i + 1] = [
+                messageCords[i + 1][0],
+                mod(messageCords[i + 1][1] + adjustment, matrixSize)
             ];
-        }
-        else if (messageCords[i][1] === messageCords[i+1][1]) {
+        } 
+        else if (messageCords[i][1] === messageCords[i + 1][1]) {
             newCords[i] = [
                 mod(messageCords[i][0] - adjustment, matrixSize),
                 messageCords[i][1]
             ];
 
-            newCords[i+1] = [
-                mod(messageCords[i+1][0] - adjustment, matrixSize),
-                messageCords[i+1][1]
+            newCords[i + 1] = [
+                mod(messageCords[i + 1][0] - adjustment, matrixSize),
+                messageCords[i + 1][1]
             ];
-        }
+        } 
         else {
             newCords[i] = [
-                messageCords[i][0], messageCords[i+1][1]
+                messageCords[i][0], messageCords[i + 1][1]
             ];
 
-            newCords[i+1] = [
-                messageCords[i+1][0], messageCords[i][1]
+            newCords[i + 1] = [
+                messageCords[i + 1][0], messageCords[i][1]
             ];
         }
     }
 
-    let newMessage: string  = '';
+    let newMessage = '';
 
     for (let i = 0; i < newCords.length; i++) {
         newMessage += matrix[newCords[i][0]][newCords[i][1]];
@@ -200,8 +203,9 @@ const encoder = (
     return newMessage;
 }
 
-// Main
-(() => {
+const submitButton = document.querySelector('.submit');
+
+submitButton.addEventListener('click', () => {
     let key = 'banana';
     let message = 'ancncn';
 
@@ -214,5 +218,5 @@ const encoder = (
     const matrix = createMatrix(key);
     const newMessage = encoder(matrix, encoding, message);
 
-    test(newMessage);
-})();
+    console.log(newMessage);
+});
