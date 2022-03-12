@@ -57,12 +57,21 @@ class rowColPair {
 
 }
 
+const make2dArray = (arraySize: number) => {
+    var array = new Array(arraySize);
+
+    for (let i = 0; i < arraySize; i++) {
+        array[i] = new Array(arraySize);
+    }
+
+    return array;
+}
+
 const createMatrix = (key: string): string[][] => {
     const alph = 'abcdefghiklmnopqrstuvwxyz'; // Note no 'j'
     const matrixSize = Math.sqrt(alph.length);
     let usedChars: Set<string> = new Set();
-    let matrix: string[][] = [];
-
+    let matrix = make2dArray(matrixSize);
     let rowCol = new rowColPair(matrixSize);
 
     for (let i = 0; i < key.length; i++) {
@@ -79,3 +88,103 @@ const createMatrix = (key: string): string[][] => {
 
     return matrix;
 }
+
+const encoder = (
+    matrix: string[][], encoding: boolean, message: string
+): string => {
+    const matrixSize = matrix.length;
+    let mapCharToCord: { [key: string]: number[] } = {};
+
+    for (let row = 0; row < matrixSize; row++) {
+        for (let cell = 0; cell < matrixSize; cell++) {
+            mapCharToCord[matrix[row][cell]] = [row, cell];
+        }
+    }
+
+    // If the message len is not even the letter 'x' is added to make 
+    // enough character pairs
+    if (message.length % 2 !== 0) {
+        message += 'x';
+    }
+
+    console.assert(message.length % 2 === 0);
+
+    // If any pair of chars is the same, the second one must be coverted
+    // to 'x'. Alos at this step every 'j' must be replaced with an 'i'
+    message.replace('j', 'i');
+
+    // TODO: There should be a more time efficient way of doing this
+    // Perhaps we should treat message as a array of string of len 1
+    for (let i = 0; i < message.length; i += 2) {
+        if (message[i] === message[i+1]) {
+            message.replace(`${message[i]}${message[i]}`, `${message[i]}x`);
+        }
+    }
+
+    let messageCords: number[][] = [];
+
+    for (let i = 0; i < message.length; i++) {
+        messageCords[i] = mapCharToCord[message[i]];
+    }
+
+    // Mod in js works differently than expected should create a number between
+    // 0 and y, but in js it can create a number between -y and y.
+    // This is not what we want so it is redifined here
+    const mod = (x: number, y: number) => ((x % y) + y) % y;
+
+    // adjustment defines the movment needed to find the propper char in the 
+    // matrix on the account of the starting pairs are in the same row/column
+    const adjustment = (encoding) ? 1 : -1;
+    let newCords: number[][] = [];
+
+    for (let i = 0; i < messageCords.length; i += 2) {
+        if (messageCords[i][0] === messageCords[i+1][0]) {
+            newCords[i] = [
+                messageCords[i][0],
+                mod(messageCords[i][1] + adjustment, matrixSize)
+            ];
+
+            newCords[i+1] = [
+                messageCords[i+1][0],
+                mod(messageCords[i+1][1] + adjustment, matrixSize)
+            ];
+        }
+        else if (messageCords[i][1] === messageCords[i+1][1]) {
+            newCords[i] = [
+                mod(messageCords[i][0] - adjustment, matrixSize),
+                messageCords[i][1]
+            ];
+
+            newCords[i+1] = [
+                mod(messageCords[i+1][0] - adjustment, matrixSize),
+                messageCords[i+1][1]
+            ];
+        }
+        else {
+            newCords[i] = [
+                messageCords[i][0], messageCords[i+1][1]
+            ];
+
+            newCords[i+1] = [
+                messageCords[i+1][0], messageCords[i][1]
+            ];
+        }
+    }
+
+    let newMessage: string;
+
+    for (let i = 0; i < newCords.length; i++) {
+        newMessage += matrix[newCords[i][0]][newCords[i][1]];
+    }
+
+    return newMessage;
+}
+
+const key = 'this';
+const message = 'banana';
+const encoding = true;
+
+const matrix = createMatrix(key);
+const newMessage = encoder(matrix, encoding, message);
+
+console.log(newMessage);
