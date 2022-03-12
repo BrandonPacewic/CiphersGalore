@@ -7,9 +7,9 @@
  */
 
 // Set<string> where each string is of len 1
-const createValidCharSet = (): Set<String> => {
+const createValidCharSet = (): Set<string> => {
     const alph = 'abcdefghijklmnopqrstuvwxyz';
-    let charSet: Set<String> = new Set();
+    let charSet: Set<string> = new Set();
 
     for (let i = 0; i < alph.length; i++) {
         charSet.add(alph[i]);
@@ -18,7 +18,7 @@ const createValidCharSet = (): Set<String> => {
     return charSet;
 }
 
-const validateInput = (charSet: Set<String>, input: string): void => {
+const validateInput = (charSet: Set<string>, input: string): void => {
     for (let i = 0; i < input.length; i++) {
         console.assert(charSet.has(input[i]));
     }
@@ -57,31 +57,30 @@ class rowColPair {
 
 }
 
-const make2dArray = (arraySize: number) => {
-    var array = new Array(arraySize);
-
-    for (let i = 0; i < arraySize; i++) {
-        array[i] = new Array(arraySize);
-    }
-
-    return array;
-}
-
 const createMatrix = (key: string): string[][] => {
     const alph = 'abcdefghiklmnopqrstuvwxyz'; // Note no 'j'
     const matrixSize = Math.sqrt(alph.length);
     let usedChars: Set<string> = new Set();
-    let matrix = make2dArray(matrixSize);
+    let matrix: string[][] = [[]];
     let rowCol = new rowColPair(matrixSize);
 
     for (let i = 0; i < key.length; i++) {
         if (usedChars.has(key[i])) { continue; }
 
+        if (matrix.length <= rowCol.row) {
+            matrix.push([]);
+        }
+
         matrix[rowCol.getRow()][rowCol.getCol()] = key[i];
+        usedChars.add(key[i]);
     }
 
     for (let i = 0; i < alph.length; i++) {
         if (usedChars.has(alph[i])) { continue; }
+
+        if (matrix.length <= rowCol.row) {
+            matrix.push([]);
+        }
 
         matrix[rowCol.getRow()][rowCol.getCol()] = alph[i];
     }
@@ -180,11 +179,14 @@ const encoder = (
     return newMessage;
 }
 
-const key = 'this';
-const message = 'banana';
+const key = 'a';
+const message = 'a';
 const encoding = true;
 
 const matrix = createMatrix(key);
+
+console.log(matrix);
+
 const newMessage = encoder(matrix, encoding, message);
 
 console.log(newMessage);
