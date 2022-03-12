@@ -1,10 +1,14 @@
 /*
  * Copyright (c) 2022 Brandon Pacewic
  *
- * Developed and tested by Brandon Pacewic
+ * Developed and // tested by Brandon Pacewic
  * 
  * home.ts - Main file for web based playfair cipher solver
  */
+
+const test = (x: any): void => {
+    console.log(x);
+}
 
 // Set<string> where each string is of len 1
 const createValidCharSet = (): Set<string> => {
@@ -100,6 +104,8 @@ const encoder = (
         }
     }
 
+    // test(mapCharToCord);
+
     // If the message len is not even the letter 'x' is added to make 
     // enough character pairs
     if (message.length % 2 !== 0) {
@@ -107,6 +113,8 @@ const encoder = (
     }
 
     console.assert(message.length % 2 === 0);
+
+    // test(message);
 
     // If any pair of chars is the same, the second one must be coverted
     // to 'x'. Alos at this step every 'j' must be replaced with an 'i'
@@ -125,6 +133,9 @@ const encoder = (
     for (let i = 0; i < message.length; i++) {
         messageCords[i] = mapCharToCord[message[i]];
     }
+
+    // test(message);
+    // test(messageCords);
 
     // Mod in js works differently than expected should create a number between
     // 0 and y, but in js it can create a number between -y and y.
@@ -160,6 +171,8 @@ const encoder = (
             ];
         }
         else {
+            // test('bettom');
+
             newCords[i] = [
                 messageCords[i][0], messageCords[i+1][1]
             ];
@@ -170,7 +183,9 @@ const encoder = (
         }
     }
 
-    let newMessage: string;
+    // test(newCords);
+
+    let newMessage: string  = '';
 
     for (let i = 0; i < newCords.length; i++) {
         newMessage += matrix[newCords[i][0]][newCords[i][1]];
@@ -179,14 +194,14 @@ const encoder = (
     return newMessage;
 }
 
-const key = 'a';
-const message = 'a';
-const encoding = true;
+// Main
+(() => {
+    const key = 'a';
+    const message = 'a';
+    const encoding = true;
+    const matrix = createMatrix(key);
+    const newMessage = encoder(matrix, encoding, message);
 
-const matrix = createMatrix(key);
-
-console.log(matrix);
-
-const newMessage = encoder(matrix, encoding, message);
-
-console.log(newMessage);
+    // test(matrix);
+    test(newMessage);
+})();
