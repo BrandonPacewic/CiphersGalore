@@ -1,9 +1,9 @@
 /*
  * Copyright (c) 2022 Brandon Pacewic
  *
- * Developed and // tested by Brandon Pacewic
+ * Developed and tested by Brandon Pacewic
  * 
- * home.ts - Main file for web based playfair cipher solver
+ * playfair.ts - File for the functionality of the playfair cipher solver
  */
 
 const test = (x: any): void => {
@@ -22,10 +22,22 @@ const createValidCharSet = (): Set<string> => {
     return charSet;
 }
 
-const validateInput = (charSet: Set<string>, input: string): void => {
+const validateInput = (charSet: Set<string>, input: string): string => {
+    input.toLowerCase();
+    input = input.split(' ').join('');
+
+    let output: string = '';
+
     for (let i = 0; i < input.length; i++) {
-        console.assert(charSet.has(input[i]));
+        if (!(charSet.has(input[i]))) {
+            console.error(`Invalid character at index ${i}`);
+            continue;
+        }
+
+        output += input[i];
     }
+
+    return output;
 }
 
 // TODO: should define matrix type, this class is just a quick fix for matrix
@@ -93,9 +105,10 @@ const createMatrix = (key: string): string[][] => {
 }
 
 const encoder = (
-    matrix: string[][], encoding: boolean, message: string
+    matrix: string[][], encoding: boolean, input: string
 ): string => {
     const matrixSize = matrix.length;
+    let message = input.split('');
     let mapCharToCord: { [key: string]: number[] } = {};
 
     for (let row = 0; row < matrixSize; row++) {
@@ -104,28 +117,28 @@ const encoder = (
         }
     }
 
-    // test(mapCharToCord);
-
     // If the message len is not even the letter 'x' is added to make 
     // enough character pairs
     if (message.length % 2 !== 0) {
-        message += 'x';
+        message.push('x');
     }
 
     console.assert(message.length % 2 === 0);
 
-    // test(message);
-
     // If any pair of chars is the same, the second one must be coverted
     // to 'x'. Alos at this step every 'j' must be replaced with an 'i'
-    message.replace('j', 'i');
+    const handleJ = (str: string): string => (str === 'j') ? 'i' : str;
+
+    const handleDoubles = (first: string, second: string): string => {
+        return (first === second) ? 'x' : second;
+    }
 
     // TODO: There should be a more time efficient way of doing this
     // Perhaps we should treat message as a array of string of len 1
     for (let i = 0; i < message.length; i += 2) {
-        if (message[i] === message[i+1]) {
-            message.replace(`${message[i]}${message[i]}`, `${message[i]}x`);
-        }
+        message[i] = handleJ(message[i]);
+        message[i+1] = handleJ(message[i+1]);
+        message[i+1] = handleDoubles(message[i], message[i+1]);
     }
 
     let messageCords: number[][] = [];
@@ -133,9 +146,6 @@ const encoder = (
     for (let i = 0; i < message.length; i++) {
         messageCords[i] = mapCharToCord[message[i]];
     }
-
-    // test(message);
-    // test(messageCords);
 
     // Mod in js works differently than expected should create a number between
     // 0 and y, but in js it can create a number between -y and y.
@@ -171,8 +181,6 @@ const encoder = (
             ];
         }
         else {
-            // test('bettom');
-
             newCords[i] = [
                 messageCords[i][0], messageCords[i+1][1]
             ];
@@ -182,8 +190,6 @@ const encoder = (
             ];
         }
     }
-
-    // test(newCords);
 
     let newMessage: string  = '';
 
@@ -196,12 +202,17 @@ const encoder = (
 
 // Main
 (() => {
-    const key = 'a';
-    const message = 'a';
-    const encoding = true;
+    let key = 'banana';
+    let message = 'ancncn';
+
+    const validCharSet = createValidCharSet();
+
+    key = validateInput(validCharSet, key);
+    message = validateInput(validCharSet, message);
+
+    const encoding = false;
     const matrix = createMatrix(key);
     const newMessage = encoder(matrix, encoding, message);
 
-    // test(matrix);
     test(newMessage);
 })();
