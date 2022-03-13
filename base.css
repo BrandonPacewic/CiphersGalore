@@ -1,0 +1,8 @@
+body {
+    background-image: linear-gradient(to right, gray, slategray);
+}
+
+form {
+    margin: 10px;
+    padding: 10px;
+}

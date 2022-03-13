@@ -6,10 +6,6 @@
  * playfair.ts - File for the functionality of the playfair cipher solver
  */
 
-const test = (x: any): void => {
-    console.log(x);
-};
-
 // Set<string> where each string is of len 1
 const createValidCharSet = (): Set<string> => {
     const alph = 'abcdefghijklmnopqrstuvwxyz';
@@ -76,7 +72,7 @@ const createMatrix = (key: string): string[][] => {
     const alph = 'abcdefghiklmnopqrstuvwxyz'; // Note no 'j'
     const matrixSize = Math.sqrt(alph.length);
     let usedChars: Set<string> = new Set();
-    let matrix: string[][] = [[]];
+    let matrix: string[][] = [];
     let rowCol = new rowColPair(matrixSize);
 
     for (let i = 0; i < key.length; i++) {
@@ -215,9 +211,3 @@ const encodeMessage = (): boolean => {
 
     return false; // Prevent page reload
 };
-
-// document.addEventListener('DOMContentLoaded', () => {
-//     const paragraph = document.querySelector('.answer');
-//     paragraph.innerHTML = 'testing';
-//     console.log(paragraph);
-// });
