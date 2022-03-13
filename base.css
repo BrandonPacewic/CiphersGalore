@@ -1,8 +1,13 @@
 body {
-    background-image: linear-gradient(to right, gray, slategray);
+    background-image: linear-gradient(to right, #121212, black);
+    color: white;
+    font-weight: 330;
 }
 
-form {
-    margin: 10px;
-    padding: 10px;
+textarea {
+    padding: 5px;
+    margin: 2px;
+    height: 7em;
+    width: 30em;
+    box-shadow: 3px 3px slategray;
 }
