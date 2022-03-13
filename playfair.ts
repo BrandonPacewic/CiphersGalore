@@ -193,10 +193,16 @@ const encoder = (
     return newMessage;
 };
 
-const encodeMessage = (): boolean => {
+document.querySelector('.encode-message').addEventListener('click', () => {
+    console.log('button update');
+
     const validCharSet = createValidCharSet();
-    let key = (<HTMLInputElement>document.getElementById('key')).value;
-    let message = (<HTMLInputElement>document.getElementById('message')).value;
+    let message = (<HTMLInputElement>document.getElementById(
+        'encoding-input')).value;
+    let key = (<HTMLInputElement>document.getElementById(
+        'encoding-key')).value;
+
+    console.log(key, message);
 
     key = validateInput(validCharSet, key);
     message = validateInput(validCharSet, message);
@@ -206,8 +212,5 @@ const encodeMessage = (): boolean => {
 
     console.log(newMessage);
 
-    const paragraph = document.querySelector('.answer');
-    paragraph.innerHTML = newMessage;
-
-    return false; // Prevent page reload
-};
+    document.querySelector('.encoding-output').innerHTML = newMessage;
+});
