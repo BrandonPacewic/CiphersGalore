@@ -7,25 +7,16 @@
 <!-- 
     This will be the input body for the playfair
 -->
-<!-- <body align="center">
-    <button type="button" class="submit">Test!</button>
-    <script src="playfair.js"></script>
-</body> -->
-
 <body align="center">
     <form>
         Message: 
         <input type="text" name="message" id="message"><br><br>
         Key: 
         <input type="text" name="key" id="key"><br><br>
-        <button 
-            onclick="encodeMessage(document.getElementById('message').value,
-            document.getElementById('key').value)" 
-            class="submit-button">
-            Encode
-        </button>
-        <script src="./playfair.js"></script>
+        <button onclick="return encodeMessage();">Submit</button>
     </form>
+    <p class="answer"></p>
+    <script src="./playfair.js"></script>
 </body>
 
 </html>

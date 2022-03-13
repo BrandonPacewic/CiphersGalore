@@ -197,15 +197,27 @@ const encoder = (
     return newMessage;
 };
 
-const encodeMessage = (message: string, key: string) => {
+const encodeMessage = (): boolean => {
     const validCharSet = createValidCharSet();
+    let key = (<HTMLInputElement>document.getElementById('key')).value;
+    let message = (<HTMLInputElement>document.getElementById('message')).value;
 
     key = validateInput(validCharSet, key);
     message = validateInput(validCharSet, message);
 
-    const encoding = false;
     const matrix = createMatrix(key);
-    const newMessage = encoder(matrix, encoding, message);
+    const newMessage = encoder(matrix, true, message);
 
     console.log(newMessage);
+
+    const paragraph = document.querySelector('.answer');
+    paragraph.innerHTML = newMessage;
+
+    return false; // Prevent page reload
 };
+
+// document.addEventListener('DOMContentLoaded', () => {
+//     const paragraph = document.querySelector('.answer');
+//     paragraph.innerHTML = 'testing';
+//     console.log(paragraph);
+// });
