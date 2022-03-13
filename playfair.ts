@@ -8,7 +8,7 @@
 
 const test = (x: any): void => {
     console.log(x);
-}
+};
 
 // Set<string> where each string is of len 1
 const createValidCharSet = (): Set<string> => {
@@ -20,17 +20,17 @@ const createValidCharSet = (): Set<string> => {
     }
 
     return charSet;
-}
+};
 
 const validateInput = (charSet: Set<string>, input: string): string => {
     input.toLowerCase();
     input = input.split(' ').join('');
 
-    let output: string = '';
+    let output = '';
 
     for (let i = 0; i < input.length; i++) {
         if (!(charSet.has(input[i]))) {
-            console.error(`Invalid character at index ${i}`);
+            console.warn(`Invalid character at index ${i}`);
             continue;
         }
 
@@ -38,7 +38,7 @@ const validateInput = (charSet: Set<string>, input: string): string => {
     }
 
     return output;
-}
+};
 
 // TODO: should define matrix type, this class is just a quick fix for matrix
 // wrapping
@@ -70,7 +70,6 @@ class rowColPair {
     getRow(): number {
         return this.row;
     }
-
 }
 
 const createMatrix = (key: string): string[][] => {
@@ -102,7 +101,7 @@ const createMatrix = (key: string): string[][] => {
     }
 
     return matrix;
-}
+};
 
 const encoder = (
     matrix: string[][], encoding: boolean, input: string
@@ -131,12 +130,12 @@ const encoder = (
     console.assert(message.length % 2 === 0);
 
     // If any pair of chars is the same, the second one must be coverted
-    // to 'x'. Alos at this step every 'j' must be replaced with an 'i'
+    // to 'x'. Also at this step every 'j' must be replaced with an 'i'
     const handleJ = (str: string): string => (str === 'j') ? 'i' : str;
 
     const handleDoubles = (first: string, second: string): string => {
         return (first === second) ? 'x' : second;
-    }
+    };
 
     for (let i = 0; i < message.length; i += 2) {
         message[i] = handleJ(message[i]);
@@ -151,8 +150,8 @@ const encoder = (
     }
 
     // Mod in js works differently than expected should create a number between
-    // 0 and y, but in js it can create a number between -y and y.
-    // This is not what we want so it is redifined here
+    // 0 and y, but in js it creates a number between -y and y.
+    // This is not what we want so it is redefined here
     const mod = (x: number, y: number) => ((x % y) + y) % y;
 
     // adjustment defines the movment needed to find the propper char in the 
@@ -184,13 +183,8 @@ const encoder = (
             ];
         } 
         else {
-            newCords[i] = [
-                messageCords[i][0], messageCords[i + 1][1]
-            ];
-
-            newCords[i + 1] = [
-                messageCords[i + 1][0], messageCords[i][1]
-            ];
+            newCords[i] = [messageCords[i][0], messageCords[i + 1][1]];
+            newCords[i + 1] = [messageCords[i + 1][0], messageCords[i][1]];
         }
     }
 
@@ -201,14 +195,9 @@ const encoder = (
     }
 
     return newMessage;
-}
+};
 
-const submitButton = document.querySelector('.submit');
-
-submitButton.addEventListener('click', () => {
-    let key = 'banana';
-    let message = 'ancncn';
-
+const encodeMessage = (message: string, key: string) => {
     const validCharSet = createValidCharSet();
 
     key = validateInput(validCharSet, key);
@@ -219,4 +208,4 @@ submitButton.addEventListener('click', () => {
     const newMessage = encoder(matrix, encoding, message);
 
     console.log(newMessage);
-});
+};
