@@ -28,6 +28,7 @@ textarea {
 .footer {
   background-color: #2D333B;
   position: absolute;
+  padding-left: 1em;
   bottom: 0;
   width: 100%;
   height: 60px;
