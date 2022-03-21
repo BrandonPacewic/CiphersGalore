@@ -1,13 +1,34 @@
 body {
-  background-image: linear-gradient(to right, #121212, black);
-  color: white;
+  background-color: #1D1F20;
+  color: #71D190;
   font-weight: 330;
 }
 
+button {
+  background-color: #2B2D2F;
+  color: #71D190;
+  font-size: 20px;
+  height: 80px;
+  width: 200px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
 textarea {
+  background-color: #2B2D2F;
+  color: white;
   padding: 5px;
   margin: 2px;
   height: 7em;
   width: 30em;
   box-shadow: 3px 3px slategray;
+  resize: none;
+}
+
+.footer {
+  background-color: #2D333B;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 60px;
 }

@@ -194,15 +194,11 @@ const encoder = (
 };
 
 document.querySelector('.encode-message').addEventListener('click', () => {
-  console.log('button update');
-
   const validCharSet = createValidCharSet();
   let message = (<HTMLInputElement>document.getElementById(
     'encoding-input')).value;
   let key = (<HTMLInputElement>document.getElementById(
     'encoding-key')).value;
-
-  console.log(key, message);
 
   key = validateInput(validCharSet, key);
   message = validateInput(validCharSet, message);
@@ -210,7 +206,5 @@ document.querySelector('.encode-message').addEventListener('click', () => {
   const matrix = createMatrix(key);
   const newMessage = encoder(matrix, true, message);
 
-  console.log(newMessage);
-
-  document.querySelector('.encoding-output').innerHTML = newMessage;
+  document.querySelector('.encoding-output').textContent = newMessage;
 });
