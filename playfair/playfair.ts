@@ -208,3 +208,19 @@ document.querySelector('.encode-message').addEventListener('click', () => {
 
   document.querySelector('.encoding-output').textContent = newMessage;
 });
+
+document.querySelector('.decode-message').addEventListener('click', () => {
+  const validCharSet = createValidCharSet();
+  let message = (<HTMLInputElement>document.getElementById(
+    'encoding-input')).value;
+  let key = (<HTMLInputElement>document.getElementById(
+    'encoding-key')).value;
+  
+  key = validateInput(validCharSet, key);
+  message = validateInput(validCharSet, message);
+  
+  const matrix = createMatrix(key);
+  const newMessage = encoder(matrix, false, message);
+
+  document.querySelector('.encoding-output').textContent = newMessage;
+});
